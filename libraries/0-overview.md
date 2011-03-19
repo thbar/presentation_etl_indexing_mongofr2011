@@ -1,4 +1,0 @@
-!SLIDE
-
-# Beyond the Language #
-

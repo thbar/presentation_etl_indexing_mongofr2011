@@ -1,4 +1,4 @@
 !SLIDE
 
-# Why Ruby, Why Now? #
-## Anthony Eden @ DNSimple ##
+# ETL et indexation - MongoDB + SolR #
+## Thibaut Barrère @ LoGeek ##
