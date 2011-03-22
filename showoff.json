@@ -2,9 +2,6 @@
   "name":"ETL et indexation Solr sur MongoDB",
   "description":"Retour d'expérience sur l'utilisation de MongoDB et Solr.",
   "sections":[
-    {"section":"introduction"},
-    {"section":"agrégration"},
-    {"section":"indexation"},
-    {"section":"attention"}
+    {"section":"presentation"}
   ]
 }
