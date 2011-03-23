@@ -81,6 +81,20 @@ Image courtesy of [lezarderose](http://www.flickr.com/people/lezarderose)
       result['points'] = record['Points']
       # ...
       
+      collection.insert(result)
+    end
+
+!SLIDE
+
+## Extraction/conformation (batch)
+
+    @@@ruby
+    HackerNews::SaxReader.new(file).each do |record|
+      result = {}      
+      result['discussion_id'] = record['ParentID']
+      result['points'] = record['Points']
+      # ...
+      
       batch << result
       if batch.size > 1000
         collection.insert(batch, :safe => true)
@@ -89,6 +103,28 @@ Image courtesy of [lezarderose](http://www.flickr.com/people/lezarderose)
     end
 
 ### => API pratique pour mapping / bulk load / lookup / truncate
+
+!SLIDE
+
+## Recherches/lookups/conversions
+
+### Distinct
+
+    @@@ruby
+    User.collection.distinct(:id, { :site => 'SO' })
+
+### Find/lookup
+
+    @@@ruby
+    quotes = Quote.find_by_asin('ABND12567X')
+
+### Updates
+
+    @@@ruby
+    collection.update(
+      { 'type' => '2','discussion_id' => discussion_id },
+      { '$set' => { 'discussion_title' => title }},
+      { :multi => true })
 
 !SLIDE
 
@@ -106,35 +142,110 @@ Image courtesy of [lezarderose](http://www.flickr.com/people/lezarderose)
 ### - une consolidation incrémentale sur un jour
 ### - ou sur un seul élément
 
+!SLIDE smaller_code
+
+## Extraction des liens
+
+    @@@ruby
+    R = /http:\/\/rads\.stackoverflow\.com\/amzn\/click\/([\w]+)/
+    
+    each_row { |row|
+      # links, yummy links!
+      Nokogiri::HTML(row[:input]['content']).css('a').each do |link|
+        href = link.attributes['href'].value
+
+        if href =~ R
+          asin = $1
+          quote = {
+            'asin' => asin,
+            'site' => 'SO',
+            'id' => row[:input]['id'],
+            'discussion_id' => row[:input]['discussion_id'],
+            'discussion_title' => row[:input]['discussion_title']
+          }
+          book = {'asin' => asin}
+          user = {'site' => quote['site'],'id' => quote['user_id']}
+          # upsert
+        end
+      end
+    end
+
+!SLIDE
+
+## Manipulations de collections par API
+
+    @@@ruby
+    tmp_items = db.collection('tmp_items')
+    tmp_items.remove # remove all items
+    
+    # import  (extract/load)
+    # screens (data checks)
+    
+    # publication de la table si validée
+    db.collection('old_items').drop
+    
+    if db.collection_exist?('items')
+      db.collection('items').rename('old_items')
+    end
+    
+    db.collection('tmp_items').rename('items')
+
 !SLIDE
 
 ### Avantages de MongoDB en ETL
+<br/>
+<br/>
 
 ## 1) Absence de schéma
 
+### Load initial facilité
+### Maintenance du load
+### Beaucoup de code en moins
+### Tests automatisés
+
 !SLIDE
 
 ### Avantages de MongoDB en ETL
+<br/>
+<br/>
 
-## 2) Richesse de requêtage
+## 2) Richesse de requêtage équivalent au SQL
+
+### Lookup par index
+### Lookup par clés composites
+### Updates multiples
 
 !SLIDE
 
 ### Avantages de MongoDB en ETL
+<br/>
+<br/>
 
 ## 3) Upsert
 
+### Même process pour complet ou incrémental
+### Built-in / atomique
+### Nouvelles features apparaissent
+
 !SLIDE
 
 ### Avantages de MongoDB en ETL
+<br/>
+<br/>
 
 ## 4) Manipulation des tables/databases
 
+### Tâche très fréquente: API moderne = yay!
+
 !SLIDE
-
 ### Avantages de MongoDB en ETL
+<br/>
+<br/>
 
-## 5) Scalabilité/sharding
+## 5) Scalabilité/sharding/map-reduce
+
+### Non utilisé sur HackerBooks.com
+### Mais à creuser
 
 !SLIDE
 
@@ -250,7 +361,7 @@ Image courtesy of [lezarderose](http://www.flickr.com/people/lezarderose)
 
 ## Indexation
 
-### Batch background
+### Batch 'transparent'
 
     @@@ruby
     preprocess {
@@ -270,7 +381,7 @@ Image courtesy of [lezarderose](http://www.flickr.com/people/lezarderose)
       Sunspot.commit
     }
 
-### Single
+### A l'unité
 
     @@@ruby
     Sunspot.index!(book)
@@ -316,13 +427,15 @@ Image (c) Cover Orange / iPad
 
 !SLIDE
 
-## 32-bits: don't
+# 32-bits: don't
 
 !SLIDE
 
-## Serveur unique
+# Si serveur unique:
 
-## --journal (or --repair)
+## --journal (1.8)
+## or
+## --repair
 
 !SLIDE full-page-image
 
