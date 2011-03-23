@@ -7,7 +7,7 @@
 <br/>
 <br/>
 <h3><span class="no_em">Retour d'expérience sur</span> <span class="t_h">Hacker</span><span class="t_b">Books</span><span class="no_em">.com</span></h3>
-<h3><span class="no_em">Thibaut Barrère @ LoGeek.fr</span></h3>
+<h3><span class="no_em">Thibaut Barrère (Freelance) @ LoGeek.fr</span></h3>
 
 !SLIDE
 
@@ -49,8 +49,10 @@
 <h1>E<span class='no_em'>xtract</span> T<span class='no_em'>ransform</span> L<span class='no_em'>oad</span></h1>
 
 <div style="text-align: center;">
-  <img src="gears.png" style="width: 20%;">
+  <img src="gears.jpg" style="width: 80%;">
 </div>
+
+Image courtesy of [lezarderose](http://www.flickr.com/people/lezarderose)
 
 !SLIDE
 
@@ -269,3 +271,40 @@
       
       paginate :page => 3, :per_page => 10
     end
+
+!SLIDE
+
+# PitFalls!!!
+
+<div style="text-align: center;">
+  <img src="pitfalls2.png" style="width: 70%;  border: 1px solid #ccc; padding: 5px;">
+</div>
+
+Image (c) Cover Orange / iPad
+
+!SLIDE
+
+## 32-bits: don't
+
+!SLIDE
+
+## Serveur unique
+
+## --journal (or --repair)
+
+!SLIDE
+
+## Consolidation <-----/-----> Front-end
+
+!SLIDE
+
+## VPS: IO, disk, RAM...
+## Préférer un dédié si possible.
+
+!SLIDE
+
+# Thank You!
+
+## des questions ?
+
+### thibaut.barrere@gmail.com
