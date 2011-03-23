@@ -40,6 +40,10 @@ span.no_em_dark {
   height: auto;
 }
 
+.smaller_code pre.sh_sourceCode {
+    font-size: 1.4em;
+}
+
 pre.sh_sourceCode {
 /*  background-color: white; */
   color: #333344;
