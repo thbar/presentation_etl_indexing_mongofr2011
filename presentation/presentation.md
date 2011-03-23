@@ -157,8 +157,11 @@ Image courtesy of [lezarderose](http://www.flickr.com/people/lezarderose)
 # Possibilités envisagées
 
 ## MongoDB seul
-## Sphinx
+## Sphinx (Pierre Far)
 ## Solr
+<br/>
+## ElasticSearch
+## MongoDB: #SERVER-380
 
 !SLIDE smaller_code
 
@@ -243,6 +246,35 @@ Image courtesy of [lezarderose](http://www.flickr.com/people/lezarderose)
 
 ### => ['HN', 'SO']
 
+!SLIDE smaller_code
+
+## Indexation
+
+### Batch background
+
+    @@@ruby
+    preprocess {
+      Sunspot.remove_all(Book)
+    }
+
+    source(:crawled_books) {
+      Book.find_all_crawled
+    }
+
+    each_row { |row|
+      book = row[:input]
+      Sunspot.index(book) if book.valid?
+    }
+
+    postprocess {
+      Sunspot.commit
+    }
+
+### Single
+
+    @@@ruby
+    Sunspot.index!(book)
+
 !SLIDE
 
 ## Recherche simple
@@ -292,9 +324,11 @@ Image (c) Cover Orange / iPad
 
 ## --journal (or --repair)
 
-!SLIDE
+!SLIDE full-page-image
 
 ## Consolidation <-----/-----> Front-end
+
+![""](production.png)
 
 !SLIDE
 
