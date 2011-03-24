@@ -145,24 +145,19 @@ Image courtesy of [lezarderose](http://www.flickr.com/people/lezarderose)
 !SLIDE smaller_code
 
 ## Extraction des liens
+<br/>
+<br/>
 
     @@@ruby
     R = /http:\/\/rads\.stackoverflow\.com\/amzn\/click\/([\w]+)/
     
     each_row { |row|
-      # links, yummy links!
       Nokogiri::HTML(row[:input]['content']).css('a').each do |link|
         href = link.attributes['href'].value
 
         if href =~ R
           asin = $1
-          quote = {
-            'asin' => asin,
-            'site' => 'SO',
-            'id' => row[:input]['id'],
-            'discussion_id' => row[:input]['discussion_id'],
-            'discussion_title' => row[:input]['discussion_title']
-          }
+          quote = { ... }
           book = {'asin' => asin}
           user = {'site' => quote['site'],'id' => quote['user_id']}
           # upsert
@@ -445,13 +440,20 @@ Image (c) Cover Orange / iPad
 
 !SLIDE
 
-## VPS: IO, disk, RAM...
-## Préférer un dédié si possible.
+# ETL: quelle configuration ?
+### IO, disk, RAM
+<br/>
+
+## Serveur VPS --
+## Serveur dédié ++
 
 !SLIDE
 
 # Thank You!
 
 ## des questions ?
+<br/>
 
 ### thibaut.barrere@gmail.com
+
+<h3><span class="t_h">Hacker</span><span class="t_b">Books</span><span class="no_em">.com</span></h3>
